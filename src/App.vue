@@ -25,10 +25,12 @@ export default {
                               1 - working
                               2 - on break
                      */
-      timerStateText: 'Idle',
-      timerSeconds: 0, // Elapsed seconds
+      timerElapsedSeconds: 0, // Elapsed seconds
       timerText: '00:00', // Formatted timer text
-      timerInterval: null // Holds interval object
+      timerInterval: null, // Holds interval object,
+      timerTimeout: null, // Holds timeout object
+      workSessionMinutes: 0.2, // Config
+      breakSessionMinutes: 0.1 // Config
     }
   },
   computed: {
@@ -40,6 +42,28 @@ export default {
     },
     isOnBreak: function () {
       return this.timerState === 2
+    },
+    timerStateText: function () {
+      if (this.timerState === 0) {
+        return 'Idle'
+      }
+      if (this.timerState === 1) {
+        return 'Working'
+      }
+      if (this.timerState === 2) {
+        return 'On Break'
+      }
+    },
+    timerText: function () {
+      if (this.isIdle) {
+        return 'Work'
+      }
+      if (this.isWorking) {
+        var secondsLeftTotal = this.workSessionMinutes * 60 - this.timerElapsedSeconds
+        var minutesLeft = Math.floor(secondsLeftTotal / 60)
+        var secondsLeft = secondsLeftTotal % 60
+        return minutesLeft + ':' + secondsLeft
+      }
     }
   },
   components: {
@@ -48,7 +72,23 @@ export default {
   },
   methods: {
     primaryAction: function () {
-      //
+      var self = this
+      if (this.isIdle) {
+        this.timerState = 1
+        this.timerElapsedSeconds = 0
+        this.timerInterval = setInterval(function () {
+          self.timerElapsedSeconds++
+        }, 1000)
+        this.timerTimeout = setTimeout(function () {
+          self.timerState = 0
+          clearInterval(self.timerInterval)
+          clearTimeout(self.timerTimeout)
+        }, 1000 * 60 * self.workSessionMinutes - 1000)
+      } else {
+        this.timerState = 0
+        clearInterval(this.timerInterval)
+        clearTimeout(this.timerTimeout)
+      }
     }
   }
 }
