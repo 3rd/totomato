@@ -4,7 +4,7 @@
       {{ timerStateText }}
     </div>
     <div class="settings">
-      <button>Settings</button>
+      <button @click="settingsAction">Settings</button>
     </div>
   </div>
 </template>
@@ -14,14 +14,21 @@ export default {
   name: 'app-header',
   props: ['timerStateText'],
   data: function () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+    return {}
+  },
+  methods: {
+    settingsAction: function () {
+      this.$emit('settings-action')
     }
   }
 }
 </script>
 
 <style scoped>
+  .app-header {
+    height: 40px;
+    border-bottom: 1px solid #ccc;
+  }
   .status {
     text-transform: uppercase;
     color: #ccc;

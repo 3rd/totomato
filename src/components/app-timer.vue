@@ -11,13 +11,12 @@ export default {
   name: 'app-timer',
   props: ['timerText'],
   data: function () {
-    return {
-      // prop
-    }
+    return {}
   },
   methods: {
     primaryAction: function () {
-      this.$emit('action')
+      console.log('emit')
+      this.$emit('primary-action')
     }
   }
 }
@@ -30,7 +29,7 @@ export default {
     height: 40vw;
     text-align: center;
     color: white;
-    font-size: 90px;
+    font-size: 80px;
     border-radius: 40vw;
     margin: auto;
     margin-top: 10vw;

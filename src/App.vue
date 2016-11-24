@@ -2,18 +2,27 @@
   <div id="app">
     <app-header
               :timer-state-text="timerStateText"
+              v-on:settings-action="settingsAction"
               class="clearfix">
     </app-header>
     <app-timer
-              v-on:action="primaryAction"
+              v-on:primary-action="primaryAction"
               :timer-text="timerText">
     </app-timer>
+    <app-settings
+              v-if="settingsVisible"
+              :work-session-minutes="workSessionMinutes"
+              :break-session-minutes="breakSessionMinutes"
+              v-on:settings-cancel="settingsCancel"
+              v-on:settings-save="settingsSave">
+    </app-settings>
   </div>
 </template>
 
 <script>
 import appHeader from './components/app-header'
 import appTimer from './components/app-timer'
+import appSettings from './components/app-settings'
 
 export default {
   name: 'app',
@@ -25,12 +34,13 @@ export default {
                               1 - working
                               2 - on break
                      */
+      previousTimerState: 0,
       timerElapsedSeconds: 0, // Elapsed seconds
-      timerText: '00:00', // Formatted timer text
       timerInterval: null, // Holds interval object,
       timerTimeout: null, // Holds timeout object
-      workSessionMinutes: 0.2, // Config
-      breakSessionMinutes: 0.1 // Config
+      settingsVisible: false, // Settings section switch
+      workSessionMinutes: 0.1, // Config
+      breakSessionMinutes: 0.2 // Config
     }
   },
   computed: {
@@ -42,6 +52,15 @@ export default {
     },
     isOnBreak: function () {
       return this.timerState === 2
+    },
+    previouslyIdle: function () {
+      return this.previousTimerState === 0
+    },
+    previouslyWorking: function () {
+      return this.previousTimerState === 1
+    },
+    previouslyOnBreak: function () {
+      return this.previousTimerState === 2
     },
     timerStateText: function () {
       if (this.timerState === 0) {
@@ -56,40 +75,92 @@ export default {
     },
     timerText: function () {
       if (this.isIdle) {
-        return 'Work'
-      }
-      if (this.isWorking) {
-        var secondsLeftTotal = this.workSessionMinutes * 60 - this.timerElapsedSeconds
-        var minutesLeft = Math.floor(secondsLeftTotal / 60)
-        var secondsLeft = secondsLeftTotal % 60
-        return minutesLeft + ':' + secondsLeft
+        if (this.previouslyIdle || this.previouslyOnBreak) {
+          return 'Work'
+        } else {
+          return 'Break'
+        }
+      } else if (this.isWorking) {
+        let secondsLeftTotal = this.workSessionMinutes * 60 - this.timerElapsedSeconds
+        let minutesLeft = Math.floor(secondsLeftTotal / 60)
+        let secondsLeft = secondsLeftTotal % 60
+        return (minutesLeft > 9 ? minutesLeft : '0' + minutesLeft) + ':' + (secondsLeft > 9 ? secondsLeft : '0' + secondsLeft)
+      } else if (this.isOnBreak) {
+        let secondsLeftTotal = this.breakSessionMinutes * 60 - this.timerElapsedSeconds
+        let minutesLeft = Math.floor(secondsLeftTotal / 60)
+        let secondsLeft = secondsLeftTotal % 60
+        return (minutesLeft > 9 ? minutesLeft : '0' + minutesLeft) + ':' + (secondsLeft > 9 ? secondsLeft : '0' + secondsLeft)
       }
     }
-  },
-  components: {
-    appHeader,
-    appTimer
   },
   methods: {
     primaryAction: function () {
       var self = this
       if (this.isIdle) {
-        this.timerState = 1
-        this.timerElapsedSeconds = 0
-        this.timerInterval = setInterval(function () {
-          self.timerElapsedSeconds++
-        }, 1000)
-        this.timerTimeout = setTimeout(function () {
-          self.timerState = 0
-          clearInterval(self.timerInterval)
-          clearTimeout(self.timerTimeout)
-        }, 1000 * 60 * self.workSessionMinutes - 1000)
+        if (this.previouslyIdle || this.previouslyOnBreak) {
+          // Start working
+          this.previousTimerState = this.timerState
+          this.timerState = 1
+          this.timerElapsedSeconds = 0
+          this.timerInterval = setInterval(function () {
+            self.timerElapsedSeconds += 1
+          }, 1000)
+          this.timerTimeout = setTimeout(function () {
+            self.previousTimerState = self.timerState
+            self.timerState = 0
+            clearInterval(self.timerInterval)
+            clearTimeout(self.timerTimeout)
+            self.notifyNewState()
+          }, 1000 * 60 * this.workSessionMinutes)
+        } else {
+          // Start break
+          this.previousTimerState = this.timerState
+          this.timerState = 2
+          this.timerElapsedSeconds = 0
+          this.timerInterval = setInterval(function () {
+            self.$nextTick(function () {
+              this.timerElapsedSeconds++
+            })
+          }, 1000)
+          this.timerTimeout = setTimeout(function () {
+            self.previousTimerState = self.timerState
+            self.timerState = 0
+            clearInterval(self.timerInterval)
+            clearTimeout(self.timerTimeout)
+            self.notifyNewState()
+          }, 1000 * 60 * this.breakSessionMinutes)
+        }
       } else {
+        this.previousTimerState = 0
         this.timerState = 0
         clearInterval(this.timerInterval)
         clearTimeout(this.timerTimeout)
       }
+    },
+    settingsAction: function () {
+      this.settingsVisible = !this.settingsVisible
+    },
+    settingsCancel: function () {
+      this.settingsVisible = false
+    },
+    settingsSave: function (data) {
+      this.workSessionMinutes = data.workSessionMinutes
+      this.breakSessionMinutes = data.breakSessionMinutes
+      this.settingsVisible = false
+    },
+    notifyNewState: function () {
+      if (this.previouslyWorking && this.isIdle) {
+        window.alert('Time to take a break!')
+      }
+      if (this.previouslyOnBreak && this.isIdle) {
+        window.alert('Time to start working')
+      }
     }
+  },
+  components: {
+    appHeader,
+    appTimer,
+    appSettings
   }
 }
 </script>
@@ -97,6 +168,9 @@ export default {
 <style>
 body {
   background: #f6f6f6;
+  margin: 0;
+  width: 100%;
+  height: 100%;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -104,16 +178,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  width: 100%;
+  height: 100%;
 }
-.clearfix:after {
-     visibility: hidden;
-     display: block;
-     font-size: 0;
-     content: " ";
-     clear: both;
-     height: 0;
-     }
-.clearfix { display: inline-block; }
-* html .clearfix { height: 1%; }
-.clearfix { display: block; }
 </style>
