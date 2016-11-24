@@ -27,6 +27,7 @@ import appHeader from './components/app-header'
 import appTimer from './components/app-timer'
 import appSettings from './components/app-settings'
 import appHistory from './components/app-history'
+import Push from 'push.js'
 export default {
   name: 'app',
   data: function () {
@@ -155,11 +156,27 @@ export default {
     },
     notifyNewState: function () {
       if (this.previouslyWorking && this.isIdle) {
-        window.alert('Time to take a break!')
+        this.pushNotificaton(
+          'Totomato',
+          'Time to take a break!'
+        )
       }
       if (this.previouslyOnBreak && this.isIdle) {
-        window.alert('Time to start working')
+        this.pushNotificaton(
+          'Totomato',
+          'Time to get back to work!'
+        )
       }
+    },
+    pushNotificaton: function (title, body, icon) {
+      Push.create(title || '{title}', {
+        body: body || '{body}',
+        icon: icon ? {
+          x16: icon + '-x16.png',
+          x32: icon + '-x32.png'
+        } : {},
+        timeout: 5000
+      })
     }
   },
   components: {
