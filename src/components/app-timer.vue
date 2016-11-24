@@ -33,6 +33,7 @@ export default {
     border-radius: 40vw;
     margin: auto;
     margin-top: 10vw;
+    cursor: pointer;
   }
   .circle .text {
     line-height: 40vw;

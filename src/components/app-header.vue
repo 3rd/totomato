@@ -4,7 +4,7 @@
       {{ timerStateText }}
     </div>
     <div class="settings">
-      <button @click="settingsAction">Settings</button>
+      <button @click="settingsAction">&#9881;</button>
     </div>
   </div>
 </template>
@@ -26,16 +26,28 @@ export default {
 
 <style scoped>
   .app-header {
-    height: 40px;
-    border-bottom: 1px solid #ccc;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    width: 100%;
+  }
+  .status, .settings {
+    vertical-align: middle;
+    display: block;
   }
   .status {
     text-transform: uppercase;
     color: #ccc;
     float: left;
+    font-weight: bold;
+    line-height: 30px;
   }
   button {
     border: 0;
     float: right;
+    font-size: 30px;
+    color: #ccc;
+    background: transparent;
+    padding: 0;
+    margin: 0;
   }
 </style>

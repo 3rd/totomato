@@ -181,4 +181,19 @@ body {
   width: 100%;
   height: 100%;
 }
+.clearfix:after {
+   visibility: hidden;
+   display: block;
+   font-size: 0;
+   content: " ";
+   clear: both;
+   height: 0;
+ }
+.clearfix { display: inline-block; }
+button {
+  cursor: pointer;
+}
+button:focus {
+  outline: 0;
+}
 </style>

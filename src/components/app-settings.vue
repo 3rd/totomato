@@ -7,8 +7,10 @@
     <div class="field">
       Break session last <input v-model="settingBreakSessionMinutes"> minutes.
     </div>
-    <button @click="saveSettings">Save settings</button>
-    <button @click="cancel">Cancel</button>
+    <div class="actions">
+      <button @click="saveSettings">Save settings</button>
+      <button @click="cancel">Cancel</button>
+    </div>
   </div>
 </template>
 
@@ -47,6 +49,23 @@ export default {
     width: 100%;
     height: 100%;
     background: #f6f6f6;
+    padding-top: 100px;
+    box-sizing: border-box;
+  }
+  h1 {
+    font-size: 24px;
+    color: #666;
+    margin-bottom: 50px;
+  }
+  .field {
+    margin-bottom: 20px;
+    background: white;
+    padding: 10px;
+    color: #999;
+    max-width: 400px;
+    display: block;
+    margin: auto;
+    margin-bottom: 10px;
   }
   input {
     border: 1px solid #eee;
@@ -54,7 +73,19 @@ export default {
     width: 40px;
     text-align: center;
   }
-  .field {
-    margin-bottom: 20px;
+  .actions {
+    margin-top: 20px;
+  }
+  button {
+    padding: 10px 20px;
+    border: 0;
+    min-width: 140px;
+    background: #3498db;
+    color: white;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+  button:last-child {
+    margin-right: 0;
   }
 </style>
