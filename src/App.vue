@@ -16,6 +16,9 @@
               v-on:settings-cancel="settingsCancel"
               v-on:settings-save="settingsSave">
     </app-settings>
+    <app-history
+              :completed-sessions-count="completedSessionsCount">
+    </app-history>
   </div>
 </template>
 
@@ -23,7 +26,7 @@
 import appHeader from './components/app-header'
 import appTimer from './components/app-timer'
 import appSettings from './components/app-settings'
-
+import appHistory from './components/app-history'
 export default {
   name: 'app',
   data: function () {
@@ -39,8 +42,9 @@ export default {
       timerInterval: null, // Holds interval object,
       timerTimeout: null, // Holds timeout object
       settingsVisible: false, // Settings section switch
-      workSessionMinutes: 0.1, // Config
-      breakSessionMinutes: 0.2 // Config
+      workSessionMinutes: 0.1, // Config default
+      breakSessionMinutes: 0.2, // Config default
+      completedSessionsCount: 4
     }
   },
   computed: {
@@ -110,6 +114,7 @@ export default {
             self.timerState = 0
             clearInterval(self.timerInterval)
             clearTimeout(self.timerTimeout)
+            self.completedSessionsCount++
             self.notifyNewState()
           }, 1000 * 60 * this.workSessionMinutes)
         } else {
@@ -160,7 +165,8 @@ export default {
   components: {
     appHeader,
     appTimer,
-    appSettings
+    appSettings,
+    appHistory
   }
 }
 </script>
