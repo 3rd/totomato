@@ -169,6 +169,10 @@ export default {
         )
       }
     },
+    playNotificationSound: function () {
+      var audio = new window.Audio('/static/assets/sound.wav')
+      audio.play()
+    },
     pushNotificaton: function (title, body, timeout, icon) {
       Push.create(title || '{title}', {
         body: body || '{body}',
@@ -178,6 +182,7 @@ export default {
         },
         timeout: timeout || 5000
       })
+      this.playNotificationSound()
     }
   },
   components: {
