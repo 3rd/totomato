@@ -51,6 +51,7 @@ export default {
     background: #f6f6f6;
     padding-top: 100px;
     box-sizing: border-box;
+    z-index: 2;
   }
   h1 {
     font-size: 24px;

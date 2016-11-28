@@ -21,12 +21,12 @@ export default {
 <style scoped>
   .app-history {
     position: fixed;
-    bottom: 50px;
+    bottom: 40px;
     width: 100%;
   }
   .circle {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     background: #fc5455;
     display: inline-block;
     margin-right: 10px;

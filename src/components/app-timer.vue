@@ -23,19 +23,32 @@ export default {
 </script>
 
 <style scoped>
+  .app-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
   .circle {
     background: #fc5455;
     width: 40vw;
     height: 40vw;
+    max-width: 200px;
+    max-height: 200px;
     text-align: center;
     color: white;
-    font-size: 80px;
+    font-size: 40px;
     border-radius: 40vw;
     margin: auto;
-    margin-top: 10vw;
     cursor: pointer;
-  }
-  .circle .text {
-    line-height: 40vw;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>

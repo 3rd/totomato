@@ -29,6 +29,10 @@ export default {
     box-sizing: border-box;
     padding: 10px 20px;
     width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
   }
   .status, .settings {
     vertical-align: middle;
@@ -40,6 +44,7 @@ export default {
     float: left;
     font-weight: bold;
     line-height: 30px;
+    font-size: 18px;
   }
   button {
     border: 0;

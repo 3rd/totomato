@@ -168,14 +168,14 @@ export default {
         )
       }
     },
-    pushNotificaton: function (title, body, icon) {
+    pushNotificaton: function (title, body, timeout, icon) {
       Push.create(title || '{title}', {
         body: body || '{body}',
         icon: icon ? {
           x16: icon + '-x16.png',
           x32: icon + '-x32.png'
         } : {},
-        timeout: 5000
+        timeout: timeout || 5000
       })
     }
   },
