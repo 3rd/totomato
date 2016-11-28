@@ -2,11 +2,11 @@
 
 ## Summary
 
-**Totomato** is a simple, minimalistic Pomodoro application. It can be customized to fit your needs. Totomato works on the web, but also on Linux/Mac/Windows as a stand-alone application.
+**Totomato** is a simple, minimalistic Pomodoro application. It can be customized to fit your needs. Totomato works on the web, but also on Linux/Mac/Windows as a stand-alone application. I built it to learn Vue.js basics.
 
 ## Get Totomato
 
-Feel free to use the online version of Totomato: ~~not released yet~~
+Feel free to use the online version of Totomato: [http://totomato.seclab.co](http://totomato.seclab.co)
 
 Alternatively you can download the stand-alone version for your platform: ~~not released yet~~
 

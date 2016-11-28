@@ -43,9 +43,13 @@ export default {
       timerInterval: null, // Holds interval object,
       timerTimeout: null, // Holds timeout object
       settingsVisible: false, // Settings section switch
-      workSessionMinutes: 0.1, // Config default
-      breakSessionMinutes: 0.2, // Config default
-      completedSessionsCount: 4
+      workSessionMinutes:
+        window.localStorage.getItem('workSessionMinutes') ||
+        25, // Config default
+      breakSessionMinutes:
+        window.localStorage.getItem('breakSessionMinutes') ||
+        5, // Config default
+      completedSessionsCount: 0
     }
   },
   computed: {
@@ -152,6 +156,8 @@ export default {
     settingsSave: function (data) {
       this.workSessionMinutes = data.workSessionMinutes
       this.breakSessionMinutes = data.breakSessionMinutes
+      window.localStorage.setItem('workSessionMinutes', this.workSessionMinutes)
+      window.localStorage.setItem('breakSessionMinutes', this.breakSessionMinutes)
       this.settingsVisible = false
     },
     notifyNewState: function () {
