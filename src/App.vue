@@ -158,7 +158,8 @@ export default {
       if (this.previouslyWorking && this.isIdle) {
         this.pushNotificaton(
           'Totomato',
-          'Time to take a break!'
+          'Time to take a break!\n' +
+          'Completed work sessions: ' + this.completedSessionsCount
         )
       }
       if (this.previouslyOnBreak && this.isIdle) {
@@ -171,10 +172,10 @@ export default {
     pushNotificaton: function (title, body, timeout, icon) {
       Push.create(title || '{title}', {
         body: body || '{body}',
-        icon: icon ? {
-          x16: icon + '-x16.png',
-          x32: icon + '-x32.png'
-        } : {},
+        icon: {
+          x16: '/static/assets/logo.png',
+          x32: '/static/assets/logo.png'
+        },
         timeout: timeout || 5000
       })
     }
