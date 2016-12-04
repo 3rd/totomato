@@ -28,8 +28,14 @@ import appTimer from './components/app-timer'
 import appSettings from './components/app-settings'
 import appHistory from './components/app-history'
 import Push from 'push.js'
+
+console.log('xxx')
+
 export default {
   name: 'app',
+  mounted: function () {
+    // this.$electron.remote.app.quit()
+  },
   data: function () {
     return {
       timerState: 0, /*
